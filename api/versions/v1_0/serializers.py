@@ -28,3 +28,8 @@ class StudentCourseMappingSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentCourseMapping
         fields = "__all__"
+
+
+class StudentSummarySerializer(serializers.Serializer):
+    course = serializers.CharField()
+    student_count = serializers.IntegerField()
