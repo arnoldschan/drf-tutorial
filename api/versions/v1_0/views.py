@@ -7,6 +7,8 @@ from django.db.models import F, Count
 from api.versions.mixins import MultiSerializerViewSetMixin
 from .serializers import CourseSerializer, StudentCourseMappingSerializer, StudentListSerializer, StudentSerializer, StudentSummarySerializer
 from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 from django.db import connection
@@ -27,6 +29,10 @@ class CustomPagination(PageNumberPagination):
 class StudentViewSet(MultiSerializerViewSetMixin, ModelViewSet, ):
     serializer_class = StudentSerializer
     pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['first_name', 'last_name']
+    filterset_fields = "__all__"
+
     queryset = Student.objects.all()
     serializer_action_classes = {
         'list': StudentListSerializer,
