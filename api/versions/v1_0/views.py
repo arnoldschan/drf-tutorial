@@ -8,6 +8,7 @@ from api.versions.mixins import MultiSerializerViewSetMixin
 from .serializers import CourseSerializer, StudentCourseMappingSerializer, StudentListSerializer, StudentSerializer, StudentSummarySerializer
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import CharFilter, FilterSet
 from rest_framework import filters
 
 
@@ -26,12 +27,23 @@ class CustomPagination(PageNumberPagination):
     page_size = 2
 
 
+class StudentFilter(FilterSet):
+    first_name__in = CharFilter(
+        field_name='first_name', lookup_expr='icontains')
+    have_course = CharFilter(
+        field_name='course__name', lookup_expr='icontains')
+
+    class Meta:
+        model = Student
+        fields = "__all__"
+
+
 class StudentViewSet(MultiSerializerViewSetMixin, ModelViewSet, ):
     serializer_class = StudentSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_class = StudentFilter
     search_fields = ['first_name', 'last_name']
-    filterset_fields = "__all__"
 
     queryset = Student.objects.all()
     serializer_action_classes = {
