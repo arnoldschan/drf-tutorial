@@ -12,6 +12,7 @@ class Student(models.Model):
     age = models.PositiveIntegerField()
     course = models.ManyToManyField(
         'Course', through='StudentCourseMapping',
+        blank=True,
         through_fields=(
             'student', 'course'),
     )
