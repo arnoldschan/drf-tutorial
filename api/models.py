@@ -9,3 +9,19 @@ class Student(models.Model):
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     age = models.PositiveIntegerField()
+    course = models.ManyToManyField(
+        'Course', through='StudentCourseMapping',
+        through_fields=(
+            'student', 'course'),
+    )
+
+
+class Course(models.Model):
+    name = models.CharField(max_length=30)
+    credits = models.BigIntegerField()
+
+
+class StudentCourseMapping(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    score = models.PositiveIntegerField()
