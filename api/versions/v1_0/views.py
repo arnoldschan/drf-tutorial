@@ -9,6 +9,9 @@ from .serializers import CourseSerializer, StudentCourseMappingSerializer, Stude
 from rest_framework.decorators import action
 
 
+from django.db import connection
+
+
 class HelloViewSet(ViewSet):
     def list(self, request):
         version = request.version
@@ -33,6 +36,11 @@ class StudentViewSet(MultiSerializerViewSetMixin, ModelViewSet, ):
     def course_summary(self, request, pk=None):
         return Response(self.get_object().course.count())
 
+    def list(self, request, *args, **kwargs):
+        result = super().list(request, *args, **kwargs)
+        print(connection.queries)
+        return result
+
 
 class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
@@ -44,6 +52,7 @@ class CourseViewSet(ModelViewSet):
             course=F('name'),
             student_count=Count(F('student')))
         data = StudentSummarySerializer(result, many=True).data
+        print(connection.queries)
         return Response(data)
 
 
