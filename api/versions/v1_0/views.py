@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.response import Response
 from api.models import Course, Student, StudentCourseMapping
-
+from rest_framework.pagination import PageNumberPagination
 from .serializers import CourseSerializer, StudentCourseMappingSerializer, StudentSerializer
 
 
@@ -11,8 +11,15 @@ class HelloViewSet(ViewSet):
         return Response(f"HELLO from version {version} !")
 
 
+class CustomPagination(PageNumberPagination):
+    page_query_param = 'p'
+    page_size_query_param = "number"
+    page_size = 2
+
+
 class StudentViewSet(ModelViewSet):
     serializer_class = StudentSerializer
+    pagination_class = CustomPagination
     queryset = Student.objects.all()
 
 
