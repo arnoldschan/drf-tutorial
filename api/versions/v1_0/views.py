@@ -74,6 +74,18 @@ class CourseViewSet(ModelViewSet):
         return Response(data)
 
 
+class StudentCourseMappingFilter(FilterSet):
+    class Meta:
+        model = StudentCourseMapping
+        fields = {
+            'score': ['lte', 'gte'],
+            'course__credits': ['lte', 'gte'],
+        }
+
+
 class StudentCourseMappingViewSet(ModelViewSet):
     serializer_class = StudentCourseMappingSerializer
     queryset = StudentCourseMapping.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = StudentCourseMappingFilter
+    ordering_fields = "__all__"
