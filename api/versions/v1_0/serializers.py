@@ -9,6 +9,12 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class StudentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        exclude = ["course", "age"]
+
+
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
