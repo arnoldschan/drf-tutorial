@@ -80,6 +80,7 @@ class StudentCourseMappingFilter(FilterSet):
         fields = {
             'score': ['lte', 'gte'],
             'course__credits': ['lte', 'gte'],
+            'course__name': ['icontains', 'istartswith'],
         }
 
 
