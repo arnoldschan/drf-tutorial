@@ -5,7 +5,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.db.models import F, Count
 
 from api.versions.mixins import MultiSerializerViewSetMixin
-from .serializers import CourseSerializer, StudentCourseMappingSerializer, StudentListSerializer, StudentSerializer, StudentSummarySerializer
+from .serializers import CourseSerializer, StudentCourseMappingRetrieveSerializer, StudentCourseMappingSerializer, StudentListSerializer, StudentSerializer, StudentSummarySerializer
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import CharFilter, FilterSet
@@ -83,9 +83,12 @@ class StudentCourseMappingFilter(FilterSet):
         }
 
 
-class StudentCourseMappingViewSet(ModelViewSet):
+class StudentCourseMappingViewSet(MultiSerializerViewSetMixin, ModelViewSet):
     serializer_class = StudentCourseMappingSerializer
     queryset = StudentCourseMapping.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = StudentCourseMappingFilter
     ordering_fields = "__all__"
+    serializer_action_classes = {
+        'retrieve': StudentCourseMappingRetrieveSerializer,
+    }

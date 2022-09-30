@@ -21,9 +21,16 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class StudentCourseMappingRetrieveSerializer(serializers.ModelSerializer):
+    student = StudentListSerializer(read_only=True)
+    course = CourseSerializer(read_only=True)
+
+    class Meta:
+        model = StudentCourseMapping
+        fields = "__all__"
+
+
 class StudentCourseMappingSerializer(serializers.ModelSerializer):
-    student = StudentListSerializer()
-    course = CourseSerializer()
 
     class Meta:
         model = StudentCourseMapping

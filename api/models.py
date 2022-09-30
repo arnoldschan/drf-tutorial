@@ -20,7 +20,7 @@ class Student(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=30)
-    credits = models.BigIntegerField()
+    credits = models.PositiveIntegerField()
 
 
 def validate_score(value):
